@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AddCategoryModal from './AddCategoryModal';
 import { RootState } from './app/store';
 import { remove, setActiveKey } from './features/categories/categoriesSlice';
+import Tasks from './Tasks';
 
 const Categories = () => {
     const categoryItems = useSelector((state: RootState) => state.categories.items);
@@ -44,7 +45,17 @@ const Categories = () => {
                 activeKey={activeKey}
                 onEdit={onEdit}
                 items={categoryItems}
-            />
+            >
+                {
+                    categoryItems.map(category => {
+                        return (
+                            <Tabs.TabPane key={category.key}>
+                                <Tasks categoryKey={category.key} />
+                            </Tabs.TabPane>
+                        )
+                    })
+                }
+            </Tabs>
             <AddCategoryModal
                 open={openNewCategoryModal}
                 setOpen={setOpenNewCategoryModal}

@@ -5,5 +5,6 @@ export interface ITask {
     description: string,
     isComplete: boolean,
     dateRange: RangePickerValue,
-    flag: boolean
+    flag: boolean,
+    key: string
 }
