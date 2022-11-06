@@ -15,7 +15,7 @@ const initialState: categoriesState = {
   items: {
     "1": {
       label: "General",
-      key: "1",
+      id: "1",
       closable: false,
       tasks: []
     }
@@ -28,8 +28,8 @@ export const categoriesSlice = createSlice({
   initialState,
   reducers: {
     addCategory: (state, action: PayloadAction<ICategory>) => {
-      state.items[action.payload.key] = action.payload;
-      state.activeKey = action.payload.key;
+      state.items[action.payload.id] = action.payload;
+      state.activeKey = action.payload.id;
     },
     removeCategory: (state, action: PayloadAction<string>) => {
       delete state.items[action.payload];
@@ -41,15 +41,27 @@ export const categoriesSlice = createSlice({
     addTask: (state, action: PayloadAction<ITask>) => {
       state.items[state.activeKey].tasks?.push(action.payload);
     },
-    updateTask: (state, action: PayloadAction<ITask>) => {
+    updateComplete: (state, action: PayloadAction<ITask>) => {
 
-      state.items[state.activeKey].tasks?.map(i => {
-        if (i.key === action.payload.key) {
-          i = action.payload;
+      const tasks = state.items[state.activeKey].tasks;
+      if (tasks) {
+        const targetTaskIndex = tasks.findIndex(i => i.id === action.payload.id);
+        let targetTask = tasks.at(targetTaskIndex);
+        if (targetTask) {
+          targetTask.isComplete = action.payload.isComplete;
         }
-        return i
-      });
+      }
 
+    },
+    updateFlag: (state, action: PayloadAction<ITask>) => {
+      const tasks = state.items[state.activeKey].tasks;
+      if (tasks) {
+        const targetTaskIndex = tasks.findIndex(i => i.id === action.payload.id);
+        let targetTask = tasks.at(targetTaskIndex);
+        if (targetTask) {
+          targetTask.flag = action.payload.flag;
+        }
+      }
     },
     removeTask: (state, action: PayloadAction<{ categoryKey: string, taskKey: string }>) => {
       // const { taskKey } = action.payload;
@@ -62,5 +74,5 @@ export const categoriesSlice = createSlice({
   }
 });
 
-export const { addCategory, removeCategory, setActiveKey, addTask, updateTask, removeTask } = categoriesSlice.actions;
+export const { addCategory, removeCategory, setActiveKey, addTask, updateComplete, updateFlag, removeTask } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

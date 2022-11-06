@@ -17,7 +17,7 @@ function Tasks({ categoryKey }: { categoryKey: string }) {
                 description: args.currentTarget.value,
                 isComplete: false,
                 flag: false,
-                key: new Date().getTime().toString()
+                id: new Date().getTime().toString()
             })
         );
         setValue("");
@@ -25,6 +25,10 @@ function Tasks({ categoryKey }: { categoryKey: string }) {
 
     const onNameChange = (args: React.ChangeEvent<HTMLInputElement>) => {
         setValue(args.target.value);
+    }
+
+    const getIncompleteTaskCount = () => {
+        return tasks?.filter(i => !i.isComplete).length
     }
 
     return (
@@ -38,7 +42,7 @@ function Tasks({ categoryKey }: { categoryKey: string }) {
                         onChange={onNameChange}
                     />
                 }
-                footer={<div>{tasks?.length ?? 0} task(s) left</div>}
+                footer={<div>{getIncompleteTaskCount()} task(s) left</div>}
                 bordered
                 dataSource={tasks}
                 renderItem={(task: ITask) => (

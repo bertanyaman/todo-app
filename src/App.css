@@ -1,3 +1,19 @@
 .App {
   padding: 30px;
 }
+
+.TaskActions .anticon{
+  margin-right: 10px;
+}
+
+.Task{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Task.Complete{
+  color:#777;
+  text-decoration: line-through;
+}

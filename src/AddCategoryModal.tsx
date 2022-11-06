@@ -10,7 +10,7 @@ const AddCategoryModal = ({ open, setOpen }: IAddCategoryModal) => {
 
     const handleOk = () => {
         setOpen(false);
-        dispatch(addCategory({ key: new Date().getTime().toString(), label, closable: true, tasks: [] }));
+        dispatch(addCategory({ id: new Date().getTime().toString(), label, closable: true, tasks: [] }));
     };
 
     const handleCancel = () => {
