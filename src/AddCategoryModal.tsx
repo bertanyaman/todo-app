@@ -2,7 +2,7 @@ import { Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { IAddCategoryModal } from './entities/IAddCategoryModal';
-import { add } from './features/categories/categoriesSlice';
+import { addCategory } from './features/categories/categoriesSlice';
 
 const AddCategoryModal = ({ open, setOpen }: IAddCategoryModal) => {
     const [label, setLabel] = useState<string>("");
@@ -10,7 +10,7 @@ const AddCategoryModal = ({ open, setOpen }: IAddCategoryModal) => {
 
     const handleOk = () => {
         setOpen(false);
-        dispatch(add({ key: new Date().getTime().toString(), label, closable: true }));
+        dispatch(addCategory({ key: new Date().getTime().toString(), label, closable: true, tasks: [] }));
     };
 
     const handleCancel = () => {

@@ -1,9 +1,10 @@
-import { Tabs } from 'antd';
-import React, { useState } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Segmented } from 'antd';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AddCategoryModal from './AddCategoryModal';
 import { RootState } from './app/store';
-import { remove, setActiveKey } from './features/categories/categoriesSlice';
+import { removeCategory, setActiveKey } from './features/categories/categoriesSlice';
 import Tasks from './Tasks';
 
 const Categories = () => {
@@ -12,50 +13,37 @@ const Categories = () => {
     const [openNewCategoryModal, setOpenNewCategoryModal] = useState(false);
     const dispatch = useDispatch();
 
-    const onChange = (newActiveKey: string) => {
-        console.log(newActiveKey);
-        dispatch(setActiveKey(newActiveKey));
+    const onChange = (newActiveKey: string | number) => {
+        dispatch(setActiveKey(newActiveKey as string));
     };
 
     const handleAdd = () => {
         setOpenNewCategoryModal(true);
-        dispatch(setActiveKey(categoryItems[categoryItems.length - 1].key));
     };
 
     const handleRemove = (targetKey: string) => {
         let newActiveKey = activeKey;
-        dispatch(remove(targetKey))
+        dispatch(removeCategory(targetKey))
         dispatch(setActiveKey(newActiveKey));
-    };
-
-    const onEdit = (targetKey: React.MouseEvent | React.KeyboardEvent | string, action: 'add' | 'remove') => {
-        if (action === 'add') {
-            handleAdd();
-        } else {
-            handleRemove(targetKey as string);
-        }
     };
 
     return (
         <>
             <h5>Categories</h5>
-            <Tabs
-                type="editable-card"
+            <Segmented
+                options={Object.keys(categoryItems).map(key => {
+                    return {
+                        label: categoryItems[key].label,
+                        value: key
+                    }
+                })}
+                value={activeKey}
                 onChange={onChange}
-                activeKey={activeKey}
-                onEdit={onEdit}
-                items={categoryItems}
-            >
-                {
-                    categoryItems.map(category => {
-                        return (
-                            <Tabs.TabPane key={category.key}>
-                                <Tasks categoryKey={category.key} />
-                            </Tabs.TabPane>
-                        )
-                    })
-                }
-            </Tabs>
+            />
+            <Button onClick={handleAdd}>
+                <PlusOutlined />
+            </Button>
+            <Tasks categoryKey={activeKey} />
             <AddCategoryModal
                 open={openNewCategoryModal}
                 setOpen={setOpenNewCategoryModal}
